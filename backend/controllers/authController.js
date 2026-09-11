@@ -2,6 +2,7 @@ import Student from '../models/Student.js'
 import Trainer from '../models/Trainer.js'
 import Admin from '../models/Admin.js'
 import generateToken from '../utils/generateToken.js'
+import { sendWelcomeEmail } from '../utils/sendEmail.js'
 
 // ---------- STUDENT ----------
 
@@ -15,6 +16,8 @@ export const registerStudent = async (req, res) => {
     }
 
     const student = await Student.create({ name, rollNumber, email, password, branch, section, year })
+
+    sendWelcomeEmail(student.email, student.name, 'student')
 
     res.status(201).json({
       _id: student._id,
@@ -66,6 +69,8 @@ export const registerTrainer = async (req, res) => {
 
     const trainer = await Trainer.create({ name, email, password, specialization, batches })
 
+    sendWelcomeEmail(trainer.email, trainer.name, 'trainer')
+
     res.status(201).json({
       _id: trainer._id,
       name: trainer.name,
@@ -111,6 +116,8 @@ export const registerAdmin = async (req, res) => {
     }
 
     const admin = await Admin.create({ name, email, password, designation })
+
+    sendWelcomeEmail(admin.email, admin.name, 'admin')
 
     res.status(201).json({
       _id: admin._id,
